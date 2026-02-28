@@ -26,7 +26,6 @@ jobs:
         run: make test
 
   format-check:
-    needs: tests
     runs-on: ubuntu-latest
 
     container:
@@ -42,7 +41,6 @@ jobs:
         run: make format-check
 
   lint:
-    needs: tests
     runs-on: ubuntu-latest
 
     container:
