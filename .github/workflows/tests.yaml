@@ -1,4 +1,4 @@
-name: Tests, Lint and Coverage
+name: Test project and check code quality
 
 on:
   # Normally it should be triggered when build workflow is successful, but it needs to be on default branch to work
@@ -11,16 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.19
+      image: debian:bookworm-slim
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
-          apk add --no-cache \
-            build-base \
-            check-dev
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential \
+            libcheck-dev
 
       - name: Run tests
         run: make test
@@ -29,13 +30,15 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.19
+      image: debian:bookworm-slim
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install clang-format
-        run: apk add --no-cache clang
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends clang-format
 
       - name: Check formatting
         run: make format-check
@@ -44,13 +47,17 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.19
+      image: debian:bookworm-slim
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install clang-tidy
-        run: apk add --no-cache clang-extra-tools build-base
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential \
+            clang-tidy
 
       - name: Run lint
         run: make lint
@@ -60,16 +67,18 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: alpine:3.19
+      image: debian:bookworm-slim
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install coverage tools
         run: |
-          apk add --no-cache \
-            build-base \
-            check-dev \
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential \
+            libcheck-dev \
+            pkg-config \
             lcov
 
       - name: Generate coverage
