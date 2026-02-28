@@ -1,14 +1,13 @@
 name: Tests, Lint and Coverage
 
 on:
-  workflow_run:
-    workflows: ["Verify project build"]
-    types:
-      - completed
+  # Normally it should be triggered when build workflow is successful, but it needs to be on default branch to work
+  # So we will trigger it on push and pull request
+  push:
+  pull_request:
 
 jobs:
   tests:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     container:
@@ -21,7 +20,7 @@ jobs:
         run: |
           apk add --no-cache \
             build-base \
-            check-dev \
+            check-dev
 
       - name: Run tests
         run: make test
