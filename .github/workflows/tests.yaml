@@ -38,7 +38,7 @@ jobs:
       - name: Install clang-format
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends clang-format
+          apt-get install -y --no-install-recommends make clang-format
 
       - name: Check formatting
         run: make format-check
@@ -57,6 +57,7 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends \
             build-essential \
+            check \
             clang-tidy
 
       - name: Run lint
