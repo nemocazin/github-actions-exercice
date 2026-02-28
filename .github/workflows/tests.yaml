@@ -1,0 +1,88 @@
+name: Tests, Lint and Coverage
+
+on:
+  workflow_run:
+    workflows: ["Verify project build"]
+    types:
+      - completed
+
+jobs:
+  tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:3.19
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apk add --no-cache \
+            build-base \
+            check-dev \
+            clang \
+            clang-extra-tools \
+            lcov
+
+      - name: Run tests
+        run: make test
+
+  format-check:
+    needs: tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:3.19
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: apk add --no-cache clang
+
+      - name: Check formatting
+        run: make format-check
+
+  lint:
+    needs: tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:3.19
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clang-tidy
+        run: apk add --no-cache clang-extra-tools build-base
+
+      - name: Run lint
+        run: make lint
+
+  coverage:
+    needs: tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: alpine:3.19
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install coverage tools
+        run: |
+          apk add --no-cache \
+            build-base \
+            check-dev \
+            lcov
+
+      - name: Generate coverage
+        run: make coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/coverage/html
