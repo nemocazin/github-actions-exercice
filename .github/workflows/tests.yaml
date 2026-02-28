@@ -22,9 +22,6 @@ jobs:
           apk add --no-cache \
             build-base \
             check-dev \
-            clang \
-            clang-extra-tools \
-            lcov
 
       - name: Run tests
         run: make test
