@@ -1,4 +1,4 @@
-name: Vérify project build
+name: Verify project build
 
 on:
   push:
