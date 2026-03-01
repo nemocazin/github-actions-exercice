@@ -108,10 +108,6 @@ jobs:
         with:
           name: coverage-info
 
-      - name: Fix coverage paths
-        run: |
-          sed -i 's|/__w/github-actions-exercice/github-actions-exercice/||g' coverage.info
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
