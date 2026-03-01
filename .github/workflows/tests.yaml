@@ -113,7 +113,7 @@ jobs:
           sed -i 's|/__w/github-actions-exercice/github-actions-exercice/||g' coverage.info
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.info
