@@ -63,55 +63,55 @@ jobs:
       - name: Run lint
         run: make lint
 
-coverage:
-  needs: tests
-  runs-on: ubuntu-latest
+  coverage:
+    needs: tests
+    runs-on: ubuntu-latest
 
-  container:
-    image: debian:bookworm-slim
+    container:
+      image: debian:bookworm-slim
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Install coverage tools
-      run: |
-        apt-get update
-        apt-get install -y --no-install-recommends \
-          build-essential \
-          check \
-          lcov
+      - name: Install coverage tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential \
+            check \
+            lcov
 
-    - name: Generate coverage
-      run: make coverage
+      - name: Generate coverage
+        run: make coverage
 
-    - name: Upload coverage HTML artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: build/coverage/html
+      - name: Upload coverage HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/coverage/html
 
-    - name: Upload coverage info artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-info
-        path: build/coverage/coverage.info
+      - name: Upload coverage info artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-info
+          path: build/coverage/coverage.info
 
-codecov:
-  needs: coverage
-  runs-on: ubuntu-latest
+  codecov:
+    needs: coverage
+    runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Download coverage info artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: coverage-info
+      - name: Download coverage info artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-info
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4.0.1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./coverage.info
-        flags: unittests
-        name: codecov-umbrella
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.info
+          flags: unittests
+          name: codecov-umbrella
