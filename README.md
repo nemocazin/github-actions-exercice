@@ -61,7 +61,7 @@ Still in the same file, add a fourth job to perform project coverage. Create an 
 
 ### 5. Codecov
 
-Go to [README Codecov](https://github.com/codecov/codecov-action#readme)and configure your project. You will need to create a secret on GitHub with the correct token.
+Go to [README Codecov](https://github.com/codecov/codecov-action#readme) and configure your project. You will need to create a secret on GitHub with the correct token.
 Now create a final job to upload the coverage artefact to Codecov.
 
 ### 6. Badges
